@@ -10,7 +10,6 @@ interface IFlashloan {
 
     struct Route {
         Hop[] hops;
-        uint16 part;
     }
 
     struct FlashParams {

@@ -13,13 +13,11 @@ import "./interfaces/IFlashloan.sol";
 
 import "./base/DodoBase.sol";
 import "./dodo/IDODOProxy.sol";
-import "./base/FlashloanValidation.sol";
 import "./base/Withdraw.sol";
 
-import "./libraries/Part.sol";
 import "./libraries/RouteUtils.sol";
 
-contract Flashloan is IFlashloan, DodoBase, FlashloanValidation, Withdraw {
+contract Flashloan is IFlashloan, DodoBase, Withdraw {
     using SafeMath for uint256;
     using SafeERC20 for IERC20;
 
@@ -66,7 +64,7 @@ contract Flashloan is IFlashloan, DodoBase, FlashloanValidation, Withdraw {
 
         require(
             IERC20(loanToken).balanceOf(address(this)) >= decoded.loanAmount,
-            "Failed to borrow loan token"
+            "PCK-02: ftblt"
         );
 
         routeLoop(decoded.routes, decoded.loanAmount);
@@ -78,7 +76,7 @@ contract Flashloan is IFlashloan, DodoBase, FlashloanValidation, Withdraw {
 
         require(
             IERC20(loanToken).balanceOf(address(this)) >= decoded.loanAmount,
-            "Not enough amount to return loan"
+            "PCK-01;neatrl;v0.4"
         );
         //Return funds
         IERC20(loanToken).transfer(decoded.flashLoanPool, decoded.loanAmount);
@@ -89,13 +87,9 @@ contract Flashloan is IFlashloan, DodoBase, FlashloanValidation, Withdraw {
         emit SentProfit(decoded.me, remained);
     }
 
-    function routeLoop(Route[] memory routes, uint256 totalAmount)
-        internal
-        checkTotalRoutePart(routes)
-    {
+    function routeLoop(Route[] memory routes, uint256 totalAmount) internal {
         for (uint256 i = 0; i < routes.length; i++) {
-            uint256 amountIn = Part.partToAmountIn(routes[i].part, totalAmount);
-            hopLoop(routes[i], amountIn);
+            hopLoop(routes[i], totalAmount);
         }
     }
 
